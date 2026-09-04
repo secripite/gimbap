@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <locale.h>
+#include <ctype.h>
 #include "config.h"
 #include "tui.h"
 
@@ -66,6 +67,46 @@ void draw_logo(WINDOW *win){
     wgetch(win);
 }
 
+// check if the project name is valid (no special characters, no spaces, etc.)
+int is_valid_project_name(const char *name) {
+    // Check if the name pointer is NULL or pointing to an empty string
+    if (name == NULL || strlen(name) == 0) {
+        return 1; // Valid: empty name
+    }
+
+    // Loop through each character of the string to find invalid symbols
+    for (int i = 0; name[i] != '\0'; i++) {
+        char c = name[i];
+
+        // Allow only alphanumeric characters (a-z, A-Z, 0-9), underscores (_), and hyphens (-)
+        // Reject spaces, exclamation marks (!), and other special symbols
+        if (!isalnum(c) && c != '_' && c != '-') {
+            return 2; // Invalid: forbidden character found
+        }
+    }
+
+    return 0; // Valid: safe project name
+}
+
+// Get the name of the current directory
+const char* get_current_directory_name(char *path_buf, size_t buf_size) {
+    if (getcwd(path_buf, buf_size) == NULL) {
+        perror("Error: getcwd failed");
+        return NULL;
+    }
+
+    // Find the last occurrence of the directory separator '/'
+    char *last_slash = strrchr(path_buf, '/');
+    
+    if (last_slash != NULL) {
+        // If '/' is found, return the pointer pointing to the next character (the folder name)
+        return last_slash + 1;
+    }
+    
+    // Fallback: If no '/' is found, return the full path buffer
+    return path_buf;
+}
+
 // step1: enter the project name
 void get_name(WINDOW *win, GimbapConfig *config) {
     if (strlen(config->name) > 0) return; // if name is already set, skip input
@@ -77,11 +118,35 @@ void get_name(WINDOW *win, GimbapConfig *config) {
     mvwprintw(win, 3, 4, "enter the project name:");
     mvwprintw(win, 5, 4, "Name: [ %-30s ]", "");
     mvwprintw(win, 8, 4, "(if not entered, current directory name will be used)");
+    mvwprintw(win, 4, 4, "(only '_' and '-' are allowed, and no spaces)");
     mvwhline(win, 11, 1, ACS_HLINE, width - 2);
     mvwprintw(win, 12, 2, "[Enter] Next");
     wmove(win, 5, 12);
     echo();
-    wgetnstr(win, config->name, 30);
+    
+    while (1)
+    {
+        char temp_name[50];
+        wgetnstr(win, temp_name, 30);
+        switch (is_valid_project_name(temp_name))
+        {
+        case 0:
+            strncpy(config->name, temp_name, sizeof(config->name) - 1);
+            config->name[sizeof(config->name) - 1] = '\0';
+            return;
+        case 1:
+            strncpy(config->name, get_current_directory_name(temp_name, sizeof(temp_name)), sizeof(config->name) - 1);
+            config->name[sizeof(config->name) - 1] = '\0';
+            return;
+        case 2:
+            mvwprintw(win, 6, 4, "Invalid project name.");
+            mvwprintw(win, 5, 4, "Name: [ %-30s ]", "");
+            wmove(win, 5, 12);
+            wrefresh(win);
+            break;
+        }
+    }        
+    
     noecho();
 }
 
@@ -215,7 +280,7 @@ void set_license(WINDOW *win, GimbapConfig *config) {
                 choice = (choice + 1) % n_licenses;
                 break;
             case Enter:
-                config->license = choice + 1; // (1: None, 2: MIT, ...)
+                config->license = choice; // (0: None, 1: MIT, ...)
                 return;
             case 'q':
                 return;
