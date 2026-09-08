@@ -10,7 +10,7 @@
 
 #define Enter 10
 
-const char* lang_name[] = {"empty", "rust", "go", "python", "npm"};
+const char* lang_name[] = {"empty", "rust", "go", "python", "npm", "c"};
 const char* license_name[] = {"None", "MIT License", "Apache License 2.0", "GPL v3"};
 
 int width = 60;
