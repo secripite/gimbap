@@ -10,7 +10,7 @@ typedef struct {
     // Project Name
     char name[50];      
     // Selected Language/Environment
-    // 0: None, 1: Rust, 2: Go, 3: Python, 4: NPM
+    // 0: None, 1: Rust, 2: Go, 3: Python, 4: NPM 5: C
     int lang;        
 
     // GitHub Remote Connection

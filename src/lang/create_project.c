@@ -19,6 +19,10 @@ void create_project(GimbapConfig *config) {
         case 4: // NPM
             // Call the function to set up an NPM project
             break;
+        case 5: // C
+            // Call the function to set up a C project
+            setup_c_project(config);
+            break;
         default: //empty or unsupported language
             // Handle unsupported language or do nothing
             break;
