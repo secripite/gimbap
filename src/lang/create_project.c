@@ -6,21 +6,24 @@
 
 void create_project(GimbapConfig *config) {
     switch (config->lang) {
-        case 1: // Rust
+        case LANG_NONE: // No language selected
+            // Call the function to set up a default project
+            break;
+        case LANG_RUST: // Rust
             // Call the function to set up a Rust project
             setup_rust_cargo_project(config);
             break;
-        case 2: // Go
+        case LANG_GO: // Go
             // Call the function to set up a Go project
             break;
-        case 3: // Python
+        case LANG_PYTHON: // Python
             // Call the function to set up a Python project
             setup_python_uv_project(config);
             break;
-        case 4: // NPM
+        case LANG_NPM: // NPM
             // Call the function to set up an NPM project
             break;
-        case 5: // C
+        case LANG_C: // C
             // Call the function to set up a C project
             setup_c_project(config);
             break;
