@@ -1,6 +1,7 @@
 #include "create_project.h"
 #include "py_structure_uv.h"
 #include "rs_structure_cargo.h"
+#include "c_structure.h"
 #include "config.h"
 
 void create_project(GimbapConfig *config) {

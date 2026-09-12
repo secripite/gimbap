@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include <locale.h>
 #include <ctype.h>
+#include <unistd.h>
 #include "config.h"
 #include "tui.h"
 
