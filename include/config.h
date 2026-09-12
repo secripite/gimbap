@@ -27,7 +27,7 @@ typedef struct {
     char name[50];   
        
     // Selected Language/Environment
-    // 0: None, 1: Rust, 2: Go, 3: Python, 4: NPM 5: C
+    // LANG_NONE: None, LANG_RUST: Rust, LANG_GO: Go, LANG_PYTHON: Python, LANG_NPM: NPM, LANG_C: C
     Lang lang;        
 
     // GitHub Remote Connection
@@ -35,7 +35,7 @@ typedef struct {
     int remote;      
 
     // Repository License
-    // 0: None, 1: MIT, 2: Apache 2.0, 3: GPL v3
+    // LICENSE_NONE: None, LICENSE_MIT: MIT, LICENSE_APACHE_2_0: Apache 2.0, LICENSE_GPL_V3: GPL v3
     License license;    
 
     // README.md Template Generation
