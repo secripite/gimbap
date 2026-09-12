@@ -2,6 +2,7 @@
 #include "py_structure_uv.h"
 #include "rs_structure_cargo.h"
 #include "c_structure.h"
+#include "go_structure.h"
 #include "config.h"
 
 void create_project(GimbapConfig *config) {
@@ -15,6 +16,7 @@ void create_project(GimbapConfig *config) {
             break;
         case LANG_GO: // Go
             // Call the function to set up a Go project
+            setup_go_project(config);
             break;
         case LANG_PYTHON: // Python
             // Call the function to set up a Python project
